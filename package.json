@@ -20,7 +20,7 @@
   },
   "scripts": {
     "watch": "gulp",
-    "build": "gulp sass"
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",

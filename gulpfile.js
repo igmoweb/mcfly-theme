@@ -21,7 +21,7 @@ var js_files = [
 ];
 
 gulp.task( 'clear-build', function() {
-    return gulp.src('./build/', {read: false})
+    return gulp.src('./mcfly/', {read: false})
         .pipe(clean());
 });
 
@@ -73,6 +73,6 @@ gulp.task('build', ['sass','javascript','clear-build'], function() {
             '!bower_components/',
         ]
     )
-        .pipe(gulp.dest('./build/'));
+        .pipe(gulp.dest('./mcfly/'));
 
 });
