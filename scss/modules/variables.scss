@@ -1,0 +1,4 @@
+$mcfly-margin:rem-calc(85);
+$mcfly-gutter:rem-calc( map-get( $grid-column-gutter, 'medium' ) )/2;
+$mcfly-margin-with-glutter:$mcfly-margin + rem-calc( map-get( $grid-column-gutter, 'medium' ) )/2;
+$mcfly-alternate-child-background:#FCFCF8;

@@ -1,0 +1,94 @@
+article.hentry {
+  padding-left: $mcfly-margin + 3*$mcfly-margin;
+  padding-right: $mcfly-margin;
+  margin-bottom: rem-calc(100);
+  .post-header {
+    // Extend the image to full width
+    margin-left: -($mcfly-margin + 3*$mcfly-margin);
+    margin-right: -$mcfly-margin;
+    margin-bottom: rem-calc(78);
+  }
+
+  &:not(.has-post-thumbnail) {
+    .post-header {
+      display: none;
+    }
+  }
+
+  .post-content {
+    color: $dark-gray;
+    word-wrap: break-word;
+    .post-date {
+      margin-bottom: $mcfly-margin / 2;
+      color:$black;
+    }
+    .post-categories {
+      margin-bottom: $mcfly-margin / 2;
+      margin-left:0;
+      li {
+        display:inline-block;
+        margin-right: $global-margin * 2;
+        list-style: none;
+        > a {
+          font-size:$small-font-size;
+          color:$dark-gray;
+          &:hover {
+            color:$black;
+          }
+        }
+      }
+    }
+    .post-tags {
+      margin-top: $mcfly-margin / 2;
+      color:$dark-gray;
+      font-size:$small-font-size;
+    }
+  }
+
+  @include breakpoint(medium down) {
+    padding-left: $mcfly-margin;
+    .post-header {
+      margin-left:-$mcfly-margin;
+    }
+  }
+}
+
+body.single,
+body.page {
+  article.hentry {
+    padding-left: $mcfly-margin;
+    padding-right: $mcfly-margin;
+    .post-header {
+      // Extend the image to full width
+      margin-left: -$mcfly-margin;
+      margin-right: -$mcfly-margin;
+      margin-bottom: rem-calc(78);
+    }
+    .post-content {
+      .post-date {
+        margin-bottom: $global-margin;
+      }
+    }
+  }
+}
+
+body.page {
+  article.hentry.has-children {
+    .page-children {
+
+      .page-child {
+        padding:$mcfly-margin $mcfly-margin;
+        // Extend the child to full width
+        margin-left: -$mcfly-margin;
+        margin-right: -$mcfly-margin;
+        &:nth-child(odd) {
+          background: $mcfly-alternate-child-background;
+        }
+      }
+      .page-child-title {
+        color:$black;
+        margin-bottom:$global-margin;
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+body.post-type-archive-jetpack-portfolio,
+body.tax-jetpack-portfolio-type {
+  .portfolio-types-filter-wrap {
+    width:100%;
+    h1.page-title {
+      width:30%;
+      float: left;
+    }
+    .portfolio-types-filter {
+      float: right;
+      width:60%;
+      padding-left:$mcfly-margin;
+      padding-right:$mcfly-margin;
+      margin-top:rem-calc( 50 );
+      text-align: right;
+      li {
+        list-style: none;
+        display:inline-block;
+        margin-right:$global-margin;
+      }
+      ul {
+        margin-left:0;
+      }
+    }
+    @include breakpoint( medium down ) {
+      h1.page-title,
+      .portfolio-types-filter {
+        float:none;
+        width:100%;
+        text-align: left;
+      }
+      h1.page-title {
+        margin-bottom:$global-margin;
+      }
+      .portfolio-types-filter {
+        margin-top:$global-margin;
+      }
+    }
+  }
+
+  article.hentry {
+    position:relative;
+    padding-left:0;
+    padding-right:0;
+    margin-bottom:0;
+    cursor: pointer;
+    .post-header {
+      transition: opacity 0.15s linear;
+      margin-left:0;
+      margin-right:0;
+      margin-bottom:0;
+    }
+    .post-content {
+      display:none;
+      position: absolute;
+      padding:$mcfly-gutter * 2;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      left:$mcfly-gutter;
+      width:100%;
+      .post-title {
+        width:100%;
+        color:$primary-color;
+        font-size:rem-calc(36);
+      }
+      .portfolio-types {
+        text-align:center;
+        width:100%;
+      }
+    }
+    &:hover {
+      .post-header {
+        opacity:0.2;
+      }
+      .post-content {
+        display:block;
+      }
+    }
+  }
+}
+
+body.single-jetpack-portfolio {
+  h1.page-title {
+    margin-bottom:$global-margin;
+  }
+
+  article.hentry {
+    > div {
+      justify-content: space-between;
+    }
+    .post-header {
+      display:none;
+    }
+    .portfolio-image {
+      margin-bottom: $global-margin;
+    }
+    .post-footer {
+      margin-top:- rem-calc(78);
+      @include breakpoint( small down ) {
+        margin-top:0;
+      }
+    }
+  }
+}
