@@ -75,7 +75,7 @@ class McFly_Theme {
 
 	function enqueue_scripts() {
 		wp_enqueue_style( 'mcfly-fonts', 'https://fonts.googleapis.com/css?family=Roboto|Suranna' );
-		wp_enqueue_style( 'mcfly', get_stylesheet_directory_uri() . '/css/mcfly.css', array(), '201611251000' );
+		wp_enqueue_style( 'mcfly', get_template_directory_uri() . '/css/mcfly.css', array(), '201611251000' );
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
@@ -83,7 +83,7 @@ class McFly_Theme {
 
 		wp_enqueue_script(
 			'mcfly-foundation',
-			get_stylesheet_directory_uri() . '/js/foundation.min.js',
+			get_template_directory_uri() . '/js/foundation.min.js',
 			array( 'jquery' )
 		);
 
