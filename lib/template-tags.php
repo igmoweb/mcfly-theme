@@ -86,7 +86,7 @@ function mcfly_the_portfolio_types() {
 		<?php foreach ( $terms as $term ): ?>
 			<li>
 				<a href="<?php echo esc_url( get_term_link( $term->term_id ) ); ?>"
-				   title="<?php printf( esc_attr__( 'See projects with %s category', 'mcfly' ) ); ?>">
+				   title="<?php printf( esc_attr__( 'See projects within %s category', 'mcfly' ), $term->name ); ?>">
 					<?php echo $term->name; ?>
 				</a>
 			</li>

@@ -2,6 +2,7 @@
 
 include_once( 'lib/template-tags.php' );
 include_once( 'lib/subtitle-box.php' );
+include_once( 'lib/gallery-box.php' );
 
 class McFly_Theme {
 	public function __construct() {
