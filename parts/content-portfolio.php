@@ -1,9 +1,5 @@
-<?php $images = get_children( array(
-	'post_parent' => get_the_ID(),
-	'post_type' => 'attachment',
-) );
-$post_thumbnail_id = get_post_thumbnail_id();
-$thumbnail_included = in_array( $post_thumbnail_id, wp_list_pluck( $images, 'ID' ) );
+<?php
+$images = mcfly_get_gallery( get_the_ID() );
 ?>
 <article <?php post_class( 'column large-12' ); ?> id="post-<?php the_ID(); ?>">
 	<div class="row">
@@ -18,14 +14,9 @@ $thumbnail_included = in_array( $post_thumbnail_id, wp_list_pluck( $images, 'ID'
 			</div>
 		</div>
 		<footer class="post-footer column medium-6 small-12">
-			<?php if ( ! $thumbnail_included ): ?>
-				<div class="portfolio-image">
-					<?php the_post_thumbnail( 'porfolio-gallery' ); ?>
-				</div>
-			<?php endif; ?>
 			<?php foreach ( $images as $image ): ?>
 				<div class="portfolio-image">
-					<?php echo wp_get_attachment_image( $image->ID, 'porfolio-gallery' ); ?>
+					<?php echo wp_get_attachment_image( $image, 'porfolio-gallery' ); ?>
 				</div>
 			<?php endforeach; ?>
 

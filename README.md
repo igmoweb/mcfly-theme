@@ -7,7 +7,6 @@
 
 ## Portfolio
 - URL del portfolio: www.misitio.com/portfolio
-- Para mostrar las imágenes a la derecha del portfolio hay que subir imágenes expresamente para dicho proyecto. Se pueden subir y luego borrar del contenido pero las imágenes seguirán apareciendo.
 
 ## Páginas con distintas secciones
 - Crear una página
