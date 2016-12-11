@@ -89,17 +89,23 @@ body.single-jetpack-portfolio {
     > div {
       justify-content: space-between;
     }
-    .post-header {
+    .post-header, .post-footer {
       display:none;
     }
-    .portfolio-image {
+  }
+
+  .project-gallery {
+    margin-top:- rem-calc(78);
+    padding-right:$mcfly-margin;
+    @include breakpoint( medium down ) {
+      padding-left:$mcfly-margin;
+    }
+
+    .portfolio-item {
       margin-bottom: $global-margin;
     }
-    .post-footer {
-      margin-top:- rem-calc(78);
-      @include breakpoint( small down ) {
-        margin-top:0;
-      }
+    @include breakpoint( small down ) {
+      margin-top:0;
     }
   }
 }

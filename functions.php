@@ -131,3 +131,16 @@ function mcfly_get_page_children( $id = false ) {
 	}
 	return $children;
 }
+
+function mcfly_get_gallery_item_type( $id ) {
+	$mime_type = get_post_mime_type( $id );
+	if ( $mime_type ) {
+		$type = explode( '/', $mime_type );
+		$type = $type[0];
+	}
+	else {
+		$type = 'vimeo';
+	}
+
+	return $type;
+}

@@ -9,13 +9,14 @@ function mcfly_register_gallery_meta_box() {
 function mcfly_gallery_meta_box( $post ) {
 	$gallery = mcfly_get_gallery( $post->ID );
 	$value = implode( ',', $gallery );
+	wp_enqueue_script( 'jquery-ui-sortable' );
 
 	?>
 	<label for="project-gallery"><span class="screen-reader-text"><?php _e( 'Subtitle', 'mcfly' ); ?></span></label>
-	<button class="button" id="portfolio-gallery-select"><?php _e( 'Select images', 'mcfly' ); ?></button>
+	<button class="button" id="portfolio-gallery-select"><?php _e( 'Add Media', 'mcfly' ); ?></button>
+	<button class="button" id="portfolio-vimeo-select"><?php _e( 'Add Vimeo', 'mcfly' ); ?></button>
 	<input type="hidden" class="widefat" name="project-gallery" id="project-gallery" value="<?php echo $value; ?>">
 	<ul id="project-gallery-images">
-		<?php mcfly_project_images_html( $gallery ); ?>
 	</ul>
 	<style>
 		#project-gallery-images li {
@@ -24,7 +25,7 @@ function mcfly_gallery_meta_box( $post ) {
 		}
 	</style>
 	<script>
-		jQuery(document).ready( function() {
+		jQuery(document).ready( function($) {
 			var media_uploader = null;
 
 			function open_media_uploader_image()
@@ -32,39 +33,108 @@ function mcfly_gallery_meta_box( $post ) {
 				media_uploader = wp.media({
 					frame:    "post",
 					state:    "insert",
-					multiple: true
-				});
-
-				var field = jQuery( '#project-gallery' );
-
-				media_uploader.on('open', function() {
-					var selection = media_uploader.state().get('selection');
-					var currentSelection = field.val().split(',');
-					for ( i in currentSelection ) {
-						selection.add(wp.media.attachment(currentSelection[i]));
-					}
-					console.log(selection);
+					multiple: false
 				});
 
 				media_uploader.on("insert", function(){
 					var length = media_uploader.state().get("selection").length;
 					var images = media_uploader.state().get("selection").models;
-					var imageIds = [];
+					console.log(images);
 
 					for (var i = 0; i < length; i++) {
-						imageIds.push(images[i].get('id'));
+                        add_item(images[i].get('id'));
 					}
-					imageIds = imageIds.join(',');
-					field.val(imageIds);
+					refresh_images_list();
 				});
 
 				media_uploader.open();
 			}
 
+			function add_item( item_id ) {
+                var field = jQuery( '#project-gallery' );
+                var currentSelection = get_items();
+                currentSelection.push(item_id );
+                field.val(currentSelection.join(','));
+            }
+
+            function has_item( item_id ) {
+                var currentSelection = get_items();
+                var has_item = false;
+                $.each( currentSelection, function( i , item ) {
+                    if ( item == item_id ) {
+                        has_item = true;
+                    }
+                });
+
+                return has_item;
+            }
+
+            function get_items() {
+                var field = jQuery( '#project-gallery' );
+                if ( field.val() == '' ) {
+                    return [];
+                }
+                return field.val().split(',');
+            }
+
+            function clear_items() {
+                var field = jQuery( '#project-gallery' );
+                field.val('');
+            }
+
+            function remove_item( item_id ) {
+                var field = jQuery( '#project-gallery' );
+                var currentSelection = get_items();
+                var newSelection = [];
+                console.log(item_id);
+                for ( var i in currentSelection ) {
+                    if ( item_id != currentSelection[i] ) {
+                        newSelection.push( currentSelection[i] );
+                    }
+                }
+                field.val(newSelection.join(','));
+            }
+
+			function refresh_images_list() {
+                var field = jQuery( '#project-gallery' );
+                var gallery = jQuery('#project-gallery-images')
+                jQuery.post( ajaxurl, {gallery:field.val(), action:'load_gallery_list'}, function(response) {
+                    gallery.html( response )
+                        .sortable({
+                            stop: function( event, ui) {
+                                var items = gallery.children();
+                                clear_items();
+                                $.each( items, function( i, item ) {
+                                    console.log($(item).data( 'img' ));
+                                    add_item( $(item).data( 'img' ) );
+                                });
+                            }
+                        });
+                });
+            }
+
+            refresh_images_list();
 			jQuery('#portfolio-gallery-select').click( function(e) {
 				e.preventDefault();
 				open_media_uploader_image();
 			});
+
+			$('#portfolio-vimeo-select').click(function(e) {
+			    e.preventDefault();
+                var vimeoId;
+			   if ( vimeoId = prompt( 'Vimeo ID' ) ) {
+                    add_item( vimeoId );
+                    console.log(vimeoId);
+                    refresh_images_list();
+               }
+            });
+
+            jQuery('#project-gallery-images').on( 'click', '.portfolio-gallery-remove', function() {
+                var $this = $(this);
+                var imgId = $this.data('img');
+                $this.parent().remove();
+                remove_item(imgId);
+            });
 		});
 	</script>
 	<?php
@@ -118,9 +188,25 @@ function mcfly_get_gallery( $post_id = false ) {
 }
 
 function mcfly_project_images_html( $gallery ) {
-	?>
-	<?php foreach ( $gallery as $image_id ): ?>
-		<li><?php echo wp_get_attachment_image( $image_id, array( 40, 40 ) ); ?></li>
-	<?php endforeach; ?>
-	<?php
+	foreach ( $gallery as $image_id ): ?>
+		<li id="project-gallery-item-<?php echo $image_id; ?>" data-img="<?php echo $image_id; ?>" class="project-gallery-item-<?php echo $type; ?>">
+			<?php if ( 'vimeo' == mcfly_get_gallery_item_type( $image_id ) ): ?>
+                <img width="40" src="<?php echo get_template_directory_uri() . '/images/vimeo.png'; ?>" alt="">
+            <?php elseif ( 'image' !== mcfly_get_gallery_item_type( $image_id ) ): ?>
+                <img width="40" src="<?php echo esc_url( includes_url( 'images/media/video.png' ) ); ?>" alt="">
+            <?php else: ?>
+	            <?php echo wp_get_attachment_image( $image_id, array( 40, 40 ) ); ?>
+            <?php endif; ?>
+            <br>
+            <span data-img="<?php echo $image_id; ?>" class="portfolio-gallery-remove dashicons dashicons-no"></span>
+        </li>
+	<?php endforeach;
+}
+
+add_action( 'wp_ajax_load_gallery_list', 'mcfly_load_gallery_list' );
+function mcfly_load_gallery_list() {
+    $gallery = $_POST['gallery'];
+	$gallery = explode( ',', $gallery );
+	mcfly_project_images_html( $gallery );
+    die();
 }

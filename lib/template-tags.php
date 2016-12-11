@@ -15,7 +15,7 @@ function mcfly_blog_title() {
 	if ( is_front_page() || is_home() )  {
 		?>
 		<h1 class="site-title">
-			<a href="<?php bloginfo( 'siteurl' ); ?>">
+			<a href="<?php bloginfo( 'url' ); ?>">
 				<?php echo $blogname; ?>
 				<?php if ( $logo ): ?>
 					<?php the_custom_logo(); ?>
@@ -27,7 +27,7 @@ function mcfly_blog_title() {
 	else {
 		?>
 		<p class="site-title">
-			<a href="<?php bloginfo( 'siteurl' ); ?>">
+			<a href="<?php bloginfo( 'url' ); ?>">
 				<?php echo $blogname; ?>
 				<?php if ( $logo ): ?>
 					<?php the_custom_logo(); ?>
@@ -93,4 +93,40 @@ function mcfly_the_portfolio_types() {
 		<?php endforeach; ?>
 	</ul>
 	<?php
+}
+
+function mcfly_the_project_gallery( $post_id ) {
+	$images = mcfly_get_gallery( get_the_ID() );
+    foreach ( $images as $image ) {
+        $type  = mcfly_get_gallery_item_type( $image );
+        if ( 'image' === $type ) {
+            ?>
+            <div class="portfolio-image portfolio-item">
+		        <?php echo wp_get_attachment_image( $image, 'fullsize' ); ?>
+            </div>
+            <?php
+        }
+        elseif ( 'vimeo' === $type ) {
+	        ?>
+            <div class="portfolio-vimeo portfolio-item flex-video">
+                <iframe src="https://player.vimeo.com/video/<?php echo $image; ?>?byline=0" width="800" height="450" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+	        <?php
+        }
+        else {
+	        $url = wp_get_attachment_url( $image );
+	        ?>
+            <div class="portfolio-video portfolio-item flex-video">
+                <?php echo do_shortcode( '[video src="' . $url . '"]' ); ?>
+            </div>
+	        <?php
+        }
+    }
+}
+
+function mcfly_content_class() {
+    if ( is_single() && 'jetpack-portfolio' === get_post_type() ) {
+        return 'align-justify';
+    }
+    return '';
 }

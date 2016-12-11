@@ -21,6 +21,7 @@ body > * {
 */
 #masthead {
   padding:rem-calc(50) $mcfly-margin;
+  position:relative;
   .title-bar {
     background: transparent;
     color:$black;
@@ -29,12 +30,33 @@ body > * {
       box-shadow: 0 7px 0 $black,0 14px 0 $black;
     }
   }
+  .menu-icon {
+    @include hamburger( #333, #000 );
+    cursor:pointer;
+  }
 }
 
 #primary-menu {
   float: right;
   .current-menu-item {
     color:$black;
+  }
+  @include breakpoint( small down ) {
+    box-shadow:0 4px 7px $dark-gray;
+    background: $dark-gray;
+    margin-top:2*$global-margin;
+    padding:$global-padding $mcfly-margin;
+    position:absolute;
+    left:0;
+    right:0;
+    text-align: left;
+    li {
+      display: block;
+      a {
+        padding-left:0;
+        color:$white;
+      }
+    }
   }
 }
 
