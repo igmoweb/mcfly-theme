@@ -5,6 +5,8 @@ var uglifyCSS = require( 'gulp-uglifycss' );
 var uglify = require( 'gulp-uglify' );
 var concat = require("gulp-concat");
 var clean = require('gulp-clean');
+var wpPot = require('gulp-wp-pot');
+var sort = require('gulp-sort');
 var $    = require('gulp-load-plugins')();
 
 var sassPaths = [
@@ -55,7 +57,21 @@ gulp.task('default', ['sass'], function() {
   gulp.watch(['scss/**/*.scss'], ['sass']);
 });
 
-gulp.task('build', ['sass','javascript','clear-build'], function() {
+gulp.task('pot', function () {
+    return gulp.src('*/**/*.php')
+        .pipe(sort())
+        .pipe(wpPot( {
+            domain: 'mcfly',
+            destFile:'mcfly.pot',
+            package: 'McFly Theme',
+            bugReport: 'http://mcfly.es',
+            lastTranslator: 'John Doe <mail@example.com>',
+            team: 'Team Team <mail@example.com>'
+        } ))
+        .pipe(gulp.dest('languages'));
+});
+
+gulp.task('build', ['sass','javascript','clear-build','pot'], function() {
 
     // Copy JS
     gulp.src(
