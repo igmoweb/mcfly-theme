@@ -7,6 +7,7 @@ var concat = require("gulp-concat");
 var clean = require('gulp-clean');
 var wpPot = require('gulp-wp-pot');
 var sort = require('gulp-sort');
+var zip = require('gulp-zip');
 var $    = require('gulp-load-plugins')();
 
 var sassPaths = [
@@ -71,7 +72,13 @@ gulp.task('pot', function () {
         .pipe(gulp.dest('languages'));
 });
 
-gulp.task('build', ['sass','javascript','clear-build','pot'], function() {
+gulp.task('zip', () => {
+    return gulp.src('mcfly/*')
+        .pipe(zip('mcfly.zip'))
+        .pipe(gulp.dest('mcfly'));
+});
+
+gulp.task('build', ['sass','javascript','clear-build','pot', 'zip'], function() {
 
     // Copy JS
     gulp.src(
